@@ -1,0 +1,125 @@
+.logo{
+    width: auto;
+    height: 60px;
+}
+.mainBg{
+    background: #2B3887;
+}
+.customBtn:hover{
+    box-shadow: rgba(221, 221, 232, 0.2) 0px 7px 29px 0px;
+}
+.bannerImg{
+    height: 250px;
+    width: 100%;
+    border-radius: 13px;
+    object-fit: cover;
+ }
+ .gameTabImg{
+    width: 30px;
+    height: 30px;
+ }
+ .gameTab{
+    transition: all 0.3s ease-in-out;
+    padding-bottom: 1px;
+     background: #AF222D;
+    border: 1px solid #F2F2F2;
+    border-bottom: 5px solid #949497;
+ }
+ .gameTab:hover{
+    padding-bottom: 1px;
+    border-bottom: 1px solid #F2F2F2;
+
+ }
+ .gameTabText{
+    font-size: 15px;
+ }
+ .gameImg{
+    border: 2px solid #AF222D;
+ }
+.div1{
+    width: 7%;
+}
+.div2{
+    width: 93%;
+}
+.footer{
+    z-index: 99;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+    padding: 10px 10px 5px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-top: 2px solid #101F3E;
+    background: linear-gradient(20deg, #3545a9, #2b3784 10%, #101f3e);
+    box-shadow: 0 -5px 10px #0000004d;
+}
+@media screen and (max-width:900px) {
+    .div1{
+        width: 10%;
+    }
+    .div2{
+        width: 90%;
+    }
+}
+@media screen and (max-width:700px) {
+    .div1{
+        width: 15%;
+    }
+    .div2{
+        width: 85%;
+    }
+}
+@media screen and (max-width:650px) {
+    .bannerImg{
+        height: 200px;
+    }
+}
+@media screen and (max-width:600px) {
+    .footerText{
+        font-size: 15px;
+    }
+}
+@media screen and (max-width:530px) {
+    .footerText{
+        font-size: 14px;
+    }
+}
+@media screen and (max-width:500px) {
+    .footerText{
+        font-size: 13px;
+    }
+}
+@media screen and (max-width:480px) {
+    .bannerImg{
+        height: 180px;
+    }
+         .div1{
+            width: 18%;
+        }
+        .div2{
+            width: 82%;
+     }
+}
+@media screen and (max-width:450px) {
+    .footerText{
+        font-size: 12px;
+    }
+}
+@media screen and (max-width:400px) {
+    .div1{
+        width: 20%;
+    }
+    .div2{
+        width: 80%;
+    }
+}
+@media screen and (max-width:350px) {
+    .div1{
+        width: 21%;
+    }
+    .div2{
+        width: 79%;
+    }
+}

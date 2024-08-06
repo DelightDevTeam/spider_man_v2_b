@@ -1,0 +1,24 @@
+.customForm{
+    width: 35%;
+    margin: auto;
+
+}
+input{
+    outline: none;
+}
+.w-full{
+    width: 100%;
+}
+button{
+    background: transparent;
+}
+@media screen and (max-width:850px) {
+    .customForm{
+        width: 80%;
+    }
+}
+@media screen and (max-width:450px) {
+    .customForm{
+        width: 95%;
+    }
+}
