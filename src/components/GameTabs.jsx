@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import all from '../assets/images/all.png'
 import slot from '../assets/images/slot.png'
 import casino from '../assets/images/casino.png'
@@ -31,14 +31,16 @@ import fg1 from '../assets/images/fg1.png'
 import fg2 from '../assets/images/fg2.png'
 import fg3 from '../assets/images/fg3.png'
 import fg4 from '../assets/images/fg4.png'
+import { AuthContext } from '../contexts/AuthContext'
 const GameTabs = () => {
+    const { lan } = useContext(AuthContext);
     const [selectedTab,setSelectedTab]=useState('all')
     const tabs=[
-        {img:all,name:'All Games',value:'all'},
-        {img:slot,name:'Slots',value:'slot'},
-        {img:casino,name:'Live Casino',value:'casino'},
-        {img:sport,name:'Sports',value:'sport'},
-        {img:fish,name:'Fishing',value:'fishing'},
+        {img:all,name:'All Games',name_mm: "ဂိမ်းအားလုံး",value:'all'},
+        {img:slot,name:'Slots',name_mm: "စလော့",value:'slot'},
+        {img:casino,name:'Live Casino',name_mm: "ကာစီနို",value:'casino'},
+        {img:sport,name:'Sports',name_mm: "အားကစား",value:'sport'},
+        {img:fish,name:'Fishing',name_mm: "ငါးဖမ်းဂိမ်း",value:'fishing'},
     ]
     const slots=[sg1,sg2,sg3,sg4,sg5,sg6,sg8,sg9,sg10,sg11,sg12]
     const casinos=[cg1,cg2,cg3,cg4,cg5,cg6,cg8,cg9,cg10,cg11]
@@ -51,7 +53,7 @@ const GameTabs = () => {
                 {tabs.map((tab,index)=>{
                     return <div onClick={()=>setSelectedTab(tab.value)} key={index} className='gameTab rounded-3 p-1 text-center'>
                         <img src={tab.img} className='gameTabImg' />
-                        <p className='gameTabText'>{tab.name}</p>
+                        <p className='gameTabText'>{lan === "en" ? tab.name : tab.name_mm}</p>
                     </div>
                 })}
             </div>
@@ -59,7 +61,7 @@ const GameTabs = () => {
         <div className="div2 ps-3 ps-sm-4">
             {selectedTab!=='all'  &&  <h4 className='text-white mb-2 mb-sm-4'>{selectedTab.toUpperCase()} GAMES</h4>}
             {selectedTab==='all' && <>
-                <h4 className='text-white mb-2 mb-sm-4'>SLOT GAMES</h4>
+                <h4 className='text-white mb-2 mb-sm-4'>{lan === "en" ? "SLOTS" : "စလော့"}</h4>
              <div className="row mb-4">
                 {slots.map((slot,index)=>{
                     return <div key={index} className="cursor-pointer col-4 col-sm-3 col-lg-2 px-1 px-sm-2 mb-2 mb-sm-3">
@@ -67,7 +69,7 @@ const GameTabs = () => {
                     </div>
                  })}
             </div>
-            <h4 className='text-white mb-2 mb-sm-4'>CASINO GAMES</h4>
+            <h4 className='text-white mb-2 mb-sm-4'>{lan === "en" ? "LIVE CASINO" : "ကာစီနို"}</h4>
              <div className="row mb-4">
                 {casinos.map((slot,index)=>{
                     return <div key={index} className="cursor-pointer col-4 col-sm-3 col-lg-2 px-1 px-sm-2 mb-2 mb-sm-3">
@@ -75,7 +77,7 @@ const GameTabs = () => {
                     </div>
                  })}
             </div>
-            <h4 className='text-white mb-2 mb-sm-4'>SPORT GAMES</h4>
+            <h4 className='text-white mb-2 mb-sm-4'>{lan === "en" ? "SPORT BOOK" : "အားကစား"}</h4>
              <div className="row mb-4">
                 {sports.map((slot,index)=>{
                     return <div key={index} className="cursor-pointer col-4 col-sm-3 col-lg-2 px-1 px-sm-2 mb-2 mb-sm-3">
@@ -83,7 +85,7 @@ const GameTabs = () => {
                     </div>
                  })}
             </div>
-            <h4 className='text-white mb-2 mb-sm-4'>FISHING GAMES</h4>
+            <h4 className='text-white mb-2 mb-sm-4'>{lan === "en" ? "FISHING" : "ငါးဖမ်း"}</h4>
              <div className="row mb-4">
                 {fishing.map((slot,index)=>{
                     return <div key={index} className="cursor-pointer col-4 col-sm-3 col-lg-2 px-1 px-sm-2 mb-2 mb-sm-3">

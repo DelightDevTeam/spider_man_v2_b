@@ -1,18 +1,20 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { FaGift } from 'react-icons/fa'
 import { HiOutlineCash } from 'react-icons/hi'
 import { HiOutlineClipboardDocumentList } from 'react-icons/hi2'
 import { IoDiamondOutline } from 'react-icons/io5'
 import { MdOutlineLockPerson } from 'react-icons/md'
 import { Link } from 'react-router-dom'
+import { AuthContext } from '../contexts/AuthContext'
 
 const Footer = () => {
+    const {lan} = useContext(AuthContext);
     const menus=[
-        {icon:<IoDiamondOutline size={26} />,name:'Home',link:'/'},
-        {icon:<MdOutlineLockPerson  size={26}/>,name:'Change Password',link:'/change-password'},
-        {icon:<FaGift  size={24}/>,name:'Promotion',link:'/promotion'},
-        {icon:<HiOutlineClipboardDocumentList  size={26}/>,name:'Game Logs',link:'/game-logs'},
-        {icon:<HiOutlineCash  size={26} />,name:'Transfer History',link:'/transfer-history'},
+        {icon:<IoDiamondOutline size={26} />,name:'Home',name_mm:'ပင်မ',link:'/'},
+        {icon:<MdOutlineLockPerson  size={26}/>,name:'Change Password',name_mm:'စကားဝှက်ပြောင်းရန်',link:'/change-password'},
+        {icon:<FaGift  size={24}/>,name:'Promotion',name_mm:'ပရိုမိုရှင်း',link:'/promotion'},
+        {icon:<HiOutlineClipboardDocumentList  size={26}/>,name:'Game Logs',name_mm:'ဂိမ်းမှတ်တမ်း',link:'/game-logs'},
+        {icon:<HiOutlineCash  size={26} />,name:'Transfer History',name_mm:'ငွေမှတ်တမ်း', link:'/transfer-history'},
 
     ]
   return (
@@ -20,7 +22,7 @@ const Footer = () => {
         {menus.map((menu,index)=>{
             return <Link to={menu.link} key={index} className='text-center' >
                 {menu.icon}
-                <p className="footerText d-block">{menu.name}</p>
+                <p className="footerText d-block mt-3">{lan === "en" ? menu.name : menu.name_mm}</p>
             </Link>
         })}
     </div>
