@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import '../assets/css/form.css'
 import logo from '../assets/images/logo.png';
 import BASE_URL from '../hooks/baseURL';
@@ -12,6 +12,13 @@ const LoginPage = () => {
   const [errMsg, setErrMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const auth = localStorage.getItem('token');
+  useEffect(() => {
+    if(auth){
+      navigate('/');
+    }
+  }, [auth, navigate]);
 
   const login = (e) => {
     e.preventDefault();

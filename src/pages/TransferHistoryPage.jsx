@@ -1,7 +1,17 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Button, Table } from 'react-bootstrap';
+import { AuthContext } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
  
 const TransferHistoryPage = () => {
+  const { auth } = useContext(AuthContext);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!auth) {
+      navigate('/login')
+    }
+  }, [auth, navigate]);
+
     const [selectedTab,setSelectedTab]=useState(1);
     const tabs=[
         {name:'Today',value:1},
