@@ -10,8 +10,7 @@ const TransferHistoryPage = () => {
   const [selectedTab, setSelectedTab] = useState(1);
   const tabs = [
     { name: "Deposit", name_mm: "ဒီနေ့", value: 1 },
-    { name: "With Draw", name_mm: "မနေ့", value: 2 },
-    
+    { name: "Withdraw", name_mm: "မနေ့", value: 2 },
   ];
 
   const {data: depositLogs, loading:depositLoading} = useFetch(BASE_URL + "/depositlog?page=1" );
@@ -19,7 +18,10 @@ const TransferHistoryPage = () => {
   const logs=useMemo(()=>{
    return selectedTab===1 ? depositLogs : withDrawLogs
   },[selectedTab,depositLogs,withDrawLogs])
-   
+  
+  // console.log(logs);
+  
+
   const dateTime = (date) => {
     return new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -65,13 +67,14 @@ const TransferHistoryPage = () => {
         })}
     </div>
     <div className="tableContainer">
-    <Table striped bordered hover>
+    <Table striped bordered hover className='text-center'>
           <thead>
             <tr>
               <th>Bank</th>
               <th>Amount</th>
               <th>Account Name</th>
               <th>Status</th>
+              <th>Date</th>
             </tr>
           </thead>
           <tbody>
@@ -81,11 +84,15 @@ const TransferHistoryPage = () => {
               </tr>
             ) : logs ? logs.map((log, index) => (
             <tr key={index}>
-              <td >
-                <Badge bg={`${statusColor(log.status)}`}>{log.status}</Badge>
+              <td>
+                {log.payment_type}
               </td>
               <td>{Number(log.amount)}Ks</td>
               <td  >{log.account_name}</td>
+              
+              <td>
+                <Badge bg={`${statusColor(log.status)}`}>{log.status}</Badge>
+              </td>
               <td>{dateTime(log.datetime)}</td>
             </tr>
             )): (

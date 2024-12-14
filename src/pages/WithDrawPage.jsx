@@ -15,7 +15,7 @@ const WithDrawPage = () => {
 
     return (
     <div className='px-2 px-sm-4 py-5 mb-5'>
-      <h4 className="text-center mb-4">With Draw</h4>
+      <h4 className="text-center mb-4">Withdraw</h4>
     {step===1 &&  <ChooseBank goToNextStep={goToNextStep} banks={banks} />}
     {step===2 &&  <WithDrawForm bank={selectedBank} /> }
     </div>
@@ -47,7 +47,7 @@ const WithDrawForm=({bank})=>{
         setForm({...form,[e.target.id]:e.target.value});
     },[setForm,form])
 
-    const { error,inputSubmit,loading } = useFormSubmit();
+    const { error,inputSubmit,loading,errMsg } = useFormSubmit();
     const handleSubmit= async(e)=>{
         e.preventDefault();
         const url=BASE_URL + "/withdraw"
@@ -71,7 +71,7 @@ const WithDrawForm=({bank})=>{
                 onChange={handleInput}
                 
                 />
-                {error?.amount && <small className='text-danger'>{error.amount}</small>}
+                {error?.amount ? <small className='text-danger'>{error.amount}</small> : errMsg && <small className='text-danger'>{errMsg}</small>}
                 {/* {errMsg && <small className='text-danger'>{errMsg}</small>} */}
               </div>
               <div className="mb-3">
