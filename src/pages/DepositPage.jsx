@@ -3,6 +3,7 @@ import useFetch from '../hooks/useFetch'
 import BASE_URL from '../hooks/baseURL'
 import useFormSubmit from '../hooks/useFormSubmit'
 import { Button, Spinner } from 'react-bootstrap';
+import toast from 'react-hot-toast';
 
 const DepositPage = () => {
   const [selectedBank, setSelectedBank] = useState(null);
@@ -55,6 +56,10 @@ const DepositForm = ({ bank }) => {
       '/transfer-history', 'Deposit successfully!'
     )
   }
+  const copyToClipboard=(number)=>{
+    navigator.clipboard.writeText(number)
+    toast.success('Copied!')
+  }
 
   return <div className='customForm'>
     <div className="d-flex justify-content-between align-items-center gap-2 gap-sm-4 border border-white p-2 rounded-3">
@@ -65,7 +70,7 @@ const DepositForm = ({ bank }) => {
           <h6 className="mb-1">{bank.account_number}</h6>
         </div>
       </div>
-      <Button className='' variant="outline-light">Copy</Button>
+      <Button onClick={()=>copyToClipboard(bank.account_number)} className='' variant="outline-light">Copy</Button>
     </div>
     <form onSubmit={handleSubmit} className='mt-4'>
       <div className="mb-3">

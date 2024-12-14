@@ -64,7 +64,7 @@ const GameLogsPage = () => {
               <tr>
                 <td colSpan="6" className="text-center text-success">Loading ....</td>
               </tr>
-            ) : logs ? logs.map((log, index) => (
+            ) : logs.length>0 ? logs.map((log, index) => (
             <tr key={index}>
               <td>{dateTime(log.from_date)}</td>
               <td>{dateTime(log.to_date)}</td>
@@ -75,7 +75,7 @@ const GameLogsPage = () => {
             </tr>
             )): (
               <tr>
-                <td colSpan="6" className="text-center text-success">{lan === "en" ? "Data Not Found" : "အချက်အလက်များမရှိသေးပါ။"}</td>
+                <td colSpan="6" className="text-center text-success fw-semibold">No Data...</td>
               </tr>
             )}
 
