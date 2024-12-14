@@ -1,29 +1,25 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { Button, Table } from 'react-bootstrap';
+import React, { useContext, useEffect, useMemo, useState } from 'react'
+import { Badge, Button, Spinner, Table } from 'react-bootstrap';
 import { AuthContext } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import BASE_URL from '../hooks/baseURL';
 import useFetch from '../hooks/useFetch';
  
 const TransferHistoryPage = () => {
-  const { auth, lan } = useContext(AuthContext);
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (!auth) {
-      navigate('/login')
-    }
-  }, [auth, navigate]);
-
-  const [selectedTab, setSelectedTab] = useState("today");
+ 
+  const [selectedTab, setSelectedTab] = useState(1);
   const tabs = [
-    { name: "Today", name_mm: "ဒီနေ့", value: "today" },
-    { name: "Yesterday", name_mm: "မနေ့", value: "yesterday" },
-    { name: "This Week", name_mm: "ဒီအပတ်", value: "this_week" },
-    { name: "Last Week", name_mm: "အရင်အပတ်", value: "last_week" },
+    { name: "Deposit", name_mm: "ဒီနေ့", value: 1 },
+    { name: "With Draw", name_mm: "မနေ့", value: 2 },
+    
   ];
 
-  const {data: logs, loading} = useFetch(BASE_URL + "/transactions?type=" + selectedTab);
-  console.log(logs);
+  const {data: depositLogs, loading:depositLoading} = useFetch(BASE_URL + "/depositlog?page=1" );
+  const {data: withDrawLogs, loading:withDrawLoading} = useFetch(BASE_URL + "/withdrawlog" );
+  const logs=useMemo(()=>{
+   return selectedTab===1 ? depositLogs : withDrawLogs
+  },[selectedTab,depositLogs,withDrawLogs])
+   
   const dateTime = (date) => {
     return new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -33,6 +29,21 @@ const TransferHistoryPage = () => {
       // minute: '2-digit',
       // second: '2-digit'
     });
+  }
+  const statusColor=(status)=>{
+    let color='';
+    switch (status) {
+      case 'Pending':
+         color='warning';
+        break;
+        case 'Success':
+          color= 'success';
+        break;
+       default:
+        color= 'danger';
+        break;
+     }
+     return color;
   }
 
   return (
@@ -48,7 +59,7 @@ const TransferHistoryPage = () => {
               onClick={() => setSelectedTab(tab.value)}
               variant={selectedTab === tab.value ? "light" : "outline-light"}
             >
-              {lan === "en" ? tab.name : tab.name_mm}
+              {tab.name}
             </Button>
           );
         })}
@@ -57,27 +68,29 @@ const TransferHistoryPage = () => {
     <Table striped bordered hover>
           <thead>
             <tr>
-              <th>{lan === "en" ? "Type" : "အမျိုးအစား"}</th>
-              <th>{lan === "en" ? "Closing Balance" : "လက်ကျန်ငွေ"}</th>
-              <th>{lan === "en" ? "Amount" : "ပမာဏ"}</th>
-              <th>{lan === "en" ? "DateTime" : "ရက်စွဲ"}</th>
+              <th>Bank</th>
+              <th>Amount</th>
+              <th>Account Name</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
-            {loading ? (
+            {depositLoading||withDrawLoading ? (
               <tr>
-                <td colSpan="4" className="text-center text-success">Loading ....</td>
+               <td colSpan="4" className='text-center'>Loading....</td>
               </tr>
             ) : logs ? logs.map((log, index) => (
             <tr key={index}>
-              <td className={`${log.type === "withdraw" ? "text-warning" : "text-success"}`}>{log.type.toUpperCase()}</td>
-              <td>{Number(log.closing_balance).toLocaleString()}</td>
-              <td className={`${log.amount < 0 ? "text-danger" : "text-success"}`}>{log.amount}</td>
+              <td >
+                <Badge bg={`${statusColor(log.status)}`}>{log.status}</Badge>
+              </td>
+              <td>{Number(log.amount)}Ks</td>
+              <td  >{log.account_name}</td>
               <td>{dateTime(log.datetime)}</td>
             </tr>
             )): (
               <tr>
-                <td colSpan="4" className="text-center text-success">{lan === "en" ? "Data Not Found" : "အချက်အလက်များမရှိသေးပါ။"}</td>
+                <td colSpan="4" className="text-center text-success">No Data...</td>
               </tr>
             )}
 

@@ -6,14 +6,7 @@ import useFetch from "../hooks/useFetch";
 import BASE_URL from "../hooks/baseURL";
 
 const GameLogsPage = () => {
-  const { auth, lan } = useContext(AuthContext);
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (!auth) {
-      navigate("/login");
-    }
-  }, [auth, navigate]);
-
+ 
   const [selectedTab, setSelectedTab] = useState("today");
   const tabs = [
     { name: "Today", name_mm: "ဒီနေ့", value: "today" },
@@ -38,7 +31,7 @@ const GameLogsPage = () => {
 
   return (
     <div className="py-4 pb-5 ps-2 px-sm-3 px-lg-4">
-      <h3 className="text-center mb-4">{lan === "en" ? "Game Logs" : "ဂိမ်းမှတ်တမ်း"}</h3>
+      <h3 className="text-center mb-4">Game Logs</h3>
       <div className="d-flex flex-wrap align-items-ceter gap-2 gap-sm-3 mb-4">
         {tabs.map((tab, index) => {
           return (
@@ -49,7 +42,7 @@ const GameLogsPage = () => {
               onClick={() => setSelectedTab(tab.value)}
               variant={selectedTab === tab.value ? "light" : "outline-light"}
             >
-              {lan === "en" ? tab.name : tab.name_mm}
+              {tab.name}
             </Button>
           );
         })}
@@ -58,12 +51,12 @@ const GameLogsPage = () => {
         <Table striped bordered hover>
           <thead>
             <tr>
-              <th>{lan === "en" ? "From Date" : "မှ"}</th>
-              <th>{lan === "en" ? "To Date" : "အထိ"}</th>
-              <th>{lan === "en" ? "Provider" : "ဂိမ်းအုပ်စု"}</th>
-              <th>{lan === "en" ? "Bet Amount" : "လောင်းကြေး"}</th>
-              <th>{lan === "en" ? "Count" : "အရေအတွက်"}</th>
-              <th>{lan === "en" ? "Win/Loss" : "နိုင်/ရှုံး"}</th>
+              <th>From</th>
+              <th>To</th>
+              <th>Game Name</th>
+              <th>Count</th>
+              <th>Bet Amount</th>
+              <th>Win/Lose</th>
             </tr>
           </thead>
           <tbody>
@@ -76,9 +69,9 @@ const GameLogsPage = () => {
               <td>{dateTime(log.from_date)}</td>
               <td>{dateTime(log.to_date)}</td>
               <td>{log.product}</td>
-              <td>{Number(log.total_bet_amount).toLocaleString()}</td>
               <td>{log.total_count}</td>
-              <td className={`${Number(log.total_transaction_amount) < 0 ? "text-danger" : "text-success"}`}>{Number(log.total_transaction_amount).toLocaleString()}</td>
+              <td>{log.total_bet_amount}Ks</td>
+              <td  >{log.total_transaction_amount}Ks</td>
             </tr>
             )): (
               <tr>

@@ -5,22 +5,22 @@ import BASE_URL from '../hooks/baseURL';
 import { Link, useNavigate } from 'react-router-dom';
 import { Spinner } from 'react-bootstrap';
 import useLogin from '../hooks/useLogin';
+import useRegister from '../hooks/useRegister';
 
-const LoginPage = () => {
+const RegisterPage = () => {
  const [form,setForm]=useState({
-  user_name:'',password:''
+  name:'', phone:'',password:'',password_confirmation:'',referral_code:''
  })
  const handleInput=(e)=>{
   setForm({...form,[e.target.id]:e.target.value})
  } 
   
-   const navigate = useNavigate();
-
-  const { errMsg,error,loading,login }= useLogin();
+ 
+  const { errMsg,error,loading,register }= useRegister();
   const handleSubmit= async (e)=>{
     e.preventDefault();
-    const url = `${BASE_URL}/login`;
-    await login(url,form);
+    const url = `${BASE_URL}/register`;
+    await register(url,form);
   }
 
   return (
@@ -40,12 +40,25 @@ const LoginPage = () => {
                 <input type='text' 
                 placeholder='Enter Name' 
                 className="rounded-3 form-control" 
-                id="user_name"
-                value={form.user_name}
+                id="name"
+                value={form.name}
                 onChange={handleInput}
                 
                 />
-                {error?.user_name && <small className='text-danger'>{error.user_name}</small>}
+                {error?.name && <small className='text-danger'>{error.name}</small>}
+                {/* {errMsg && <small className='text-danger'>{errMsg}</small>} */}
+              </div>
+              <div className="mb-3">
+                <p className='mb-1'>Phone</p>
+                <input type='text' 
+                placeholder='Enter Phone' 
+                className="rounded-3 form-control" 
+                id="phone"
+                value={form.phone}
+                onChange={handleInput}
+                
+                />
+                {error?.phone && <small className='text-danger'>{error.phone}</small>}
                 {/* {errMsg && <small className='text-danger'>{errMsg}</small>} */}
               </div>
               <div className="mb-3">
@@ -59,18 +72,40 @@ const LoginPage = () => {
                 />
                 {error?.password && <small className='text-danger'>{error.password}</small>}
               </div>
+              <div className="mb-3">
+                <p className='mb-1'>Confirm Password</p>
+                <input type='password' 
+                placeholder='Enter Confirm Password' 
+                className="rounded-3 form-control"
+               id='password_confirmation'
+               value={form.password_confirmation}
+               onChange={handleInput}
+                />
+                {error?.password_confirmation && <small className='text-danger'>{error.password_confirmation}</small>}
+              </div>
+              <div className="mb-3">
+                <p className='mb-1'>Referral Code</p>
+                <input type='text' 
+                placeholder='Enter Referral Code' 
+                className="rounded-3 form-control"
+               id='referral_code'
+               value={form.referral_code}
+               onChange={handleInput}
+                />
+                {error?.referral_code && <small className='text-danger'>{error.referral_code}</small>}
+              </div>
               
               <button type='submit' className="mt-4 w-full text-white border border-white rounded-3 text-center py-2 px-4">
                 {loading && <Spinner size='sm' className='me-2' />}
-                Login
+                Register
               </button>
             </form>
             <div className="text-center mt-4">
-            Don't have an account yet? <Link className='border-bottom' to={'/register'}>Register Now</Link>
+            Already have an account? <Link className='border-bottom' to={'/login'}>Login Here</Link>
             </div>
         </div>
     </div>
   )
 }
 
-export default LoginPage
+export default RegisterPage

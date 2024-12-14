@@ -9,7 +9,7 @@
     box-shadow: rgba(221, 221, 232, 0.2) 0px 7px 29px 0px;
 }
 .bannerImg{
-    height: 250px;
+    height: 280px;
     width: 100%;
     border-radius: 13px;
     object-fit: cover;
@@ -73,7 +73,7 @@
 }
 @media screen and (max-width:650px) {
     .bannerImg{
-        height: 200px;
+        height: 230px;
     }
 }
 @media screen and (max-width:600px) {
@@ -104,7 +104,7 @@
 }
 @media screen and (max-width:450px) {
     .footerText{
-        font-size: 12px;
+        font-size: 11px;
     }
 }
 @media screen and (max-width:400px) {
@@ -121,5 +121,10 @@
     }
     .div2{
         width: 79%;
+    }
+}
+@media screen and (max-width:325px) {
+    .footerText{
+        font-size: 10px;
     }
 }
