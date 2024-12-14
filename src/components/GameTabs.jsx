@@ -35,6 +35,8 @@ import { AuthContext } from '../contexts/AuthContext'
 import useFetch from '../hooks/useFetch'
 import BASE_URL from '../hooks/baseURL'
 import { useNavigate } from 'react-router-dom'
+import { Spinner } from 'react-bootstrap'
+import launchGame from '../hooks/launchGame'
 const GameTabs = () => {
     const { lan, auth } = useContext(AuthContext);
     const navigate = useNavigate();
@@ -42,62 +44,21 @@ const GameTabs = () => {
 
     const tabs=[
         {img:all,name:'All Games',name_mm: "ဂိမ်းအားလုံး",value:'all'},
-        {img:slot,name:'Slots',name_mm: "စလော့",value:'slot'},
+        {img:all,name:'Hot Games',name_mm: "Hot Game",value:'hot'},
+         {img:slot,name:'Slots',name_mm: "စလော့",value:'slot'},
         {img:casino,name:'Live Casino',name_mm: "ကာစီနို",value:'casino'},
-        {img:sport,name:'Sports',name_mm: "အားကစား",value:'sport'},
-        {img:fish,name:'Fishing',name_mm: "ငါးဖမ်းဂိမ်း",value:'fishing'},
+        // {img:sport,name:'Sports',name_mm: "အားကစား",value:'sport'},
+        // {img:fish,name:'Fishing',name_mm: "ငါးဖမ်းဂိမ်း",value:'fishing'},
     ]
+    const { data: hotGames,loading:hotLoading } = useFetch(BASE_URL + "/hotgamelist");
+    console.log('hotGames',hotGames)
 
-    const { data: slotGames } = useFetch(BASE_URL + "/gameTypeProducts/1");
+    const { data: slotGames ,loading:slotLoading} = useFetch(BASE_URL + "/gameTypeProducts/2");
     const slots = slotGames?.products;
-    const slotType = slotGames?.code;
-
-    const { data: casinoGames } = useFetch(BASE_URL + "/gameTypeProducts/2");
+ 
+    const { data: casinoGames,loading:casinoLoading } = useFetch(BASE_URL + "/gameTypeProducts/6");
     const casinos = casinoGames?.products;
-    const casinoType = casinoGames?.code;
-    
-    const { data: sportGames } = useFetch(BASE_URL + "/gameTypeProducts/3");
-    const sports = sportGames?.products;
-    const sportType = sportGames?.code;
-
-    const { data: fishGames } = useFetch(BASE_URL + "/gameTypeProducts/4");
-    const fishes = fishGames?.products;
-    const fishType = fishGames?.code;
-
-    const launchGame = (p_id, t_id) => (e) => {
-        e.preventDefault();
-        if(!auth){
-            navigate('/login');
-        }
-        const inputData = {
-            productId: p_id,
-            gameType: t_id
-        };
-        fetch(BASE_URL + "/game/Seamless/LaunchGame", {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + localStorage.getItem("token"),
-            },
-            body: JSON.stringify(inputData),
-          })
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error("Launch Game failed");
-              }
-              console.log("Launch Game success");
-              return response.json();
-            })
-            .then((data) => {
-              window.open(data.Url, "_blank");
-            })
-            .catch((error) => {
-              console.error("Launch Game error:", error);
-            });
-    };
-    
-
+  
   return (
     <div className='row cursor-pointer mb-5'>
         <div className="div1  px-0">
@@ -113,51 +74,58 @@ const GameTabs = () => {
         <div className="div2 ps-3 ps-sm-4">
             {/* {selectedTab!=='all'  &&  <h4 className='text-white mb-2 mb-sm-4'>{selectedTab.toUpperCase()} GAMES</h4>} */}
             {selectedTab==='all' && <>
+                <>
+                <h4 className='text-white mb-2 mb-sm-4'>Hot Games</h4>
+                <div className="row mb-4">
+                    { hotLoading ? <Spinner/> :
+                    hotGames && hotGames.map((item,index)=>{
+                        return <div key={index} className="cursor-pointer col-4 col-sm-3 col-lg-2 px-1 px-sm-2 mb-2 mb-sm-3"  onClick={launchGame(item.game_code)}>
+                            <img src={item.image_url} className='gameImg img-fluid rounded-4 rounded-lg-5' />
+                        </div>
+                    })}
+                </div>
+                </>
                 <h4 className='text-white mb-2 mb-sm-4'>{lan === "en" ? "SLOTS" : "စလော့"}</h4>
                 <div className="row mb-4">
-                    {slots && slots.map((slot,index)=>{
-                        return <div key={index} className="cursor-pointer col-4 col-sm-3 col-lg-2 px-1 px-sm-2 mb-2 mb-sm-3" onClick={launchGame(slot.code, slotType)}>
+                    {slotLoading ? <Spinner/> :
+                    slots && slots.map((slot,index)=>{
+                        return <div key={index} className="cursor-pointer col-4 col-sm-3 col-lg-2 px-1 px-sm-2 mb-2 mb-sm-3" onClick={()=>navigate(`/games?providerId=${slot.id}&gameTypeId=2`)}>
                             <img src={slot.imgUrl} className='gameImg img-fluid rounded-4 rounded-lg-5' />
                         </div>
                     })}
                 </div>
                 <h4 className='text-white mb-2 mb-sm-4'>{lan === "en" ? "LIVE CASINO" : "ကာစီနို"}</h4>
                 <div className="row mb-4">
-                    {casinos && casinos.map((casino,index)=>{
-                        return <div key={index} className="cursor-pointer col-4 col-sm-3 col-lg-2 px-1 px-sm-2 mb-2 mb-sm-3" onClick={launchGame(casino.code, casinoType)}>
+                    {
+                    casinoLoading ? <Spinner/> :
+                    casinos && casinos.map((casino,index)=>{
+                        return <div key={index} className="cursor-pointer col-4 col-sm-3 col-lg-2 px-1 px-sm-2 mb-2 mb-sm-3" onClick={()=>navigate(`/games?providerId=${casino.id}&gameTypeId=6`)}>
                             <img src={casino.imgUrl} className='gameImg img-fluid rounded-4 rounded-lg-5' />
                         </div>
                     })}
                 </div>
-                <h4 className='text-white mb-2 mb-sm-4'>{lan === "en" ? "SPORT BOOK" : "အားကစား"}</h4>
-                <div className="row mb-4">
-                    {sports && sports.map((sport,index)=>{
-                        return <div key={index} 
-                        className="cursor-pointer col-4 col-sm-3 col-lg-2 px-1 px-sm-2 mb-2 mb-sm-3"
-                        onClick={launchGame(sport.code, sportType)}
-                        >
-                            <img src={sport.imgUrl} className='gameImg img-fluid rounded-4 rounded-lg-5' />
-                        </div>
-                    })}
-                </div>
-                <h4 className='text-white mb-2 mb-sm-4'>{lan === "en" ? "FISHING" : "ငါးဖမ်း"}</h4>
-                <div className="row mb-4">
-                    {fishes && fishes.map((fish,index)=>{
-                        return <div key={index} 
-                        className="cursor-pointer col-4 col-sm-3 col-lg-2 px-1 px-sm-2 mb-2 mb-sm-3"
-                        onClick={launchGame(fish.code, fishType)}
-                        >
-                            <img src={fish.imgUrl} className='gameImg img-fluid rounded-4 rounded-lg-5' />
-                        </div>
-                    })}
-                </div>
+                
             </> }
+            {selectedTab==='hot' && (
+                <>
+                <h4 className='text-white mb-2 mb-sm-4'>Hot Games</h4>
+                <div className="row mb-4">
+                    { hotLoading ? <Spinner/> :
+                    hotGames && hotGames.map((item,index)=>{
+                        return <div key={index} className="cursor-pointer col-4 col-sm-3 col-lg-2 px-1 px-sm-2 mb-2 mb-sm-3"  onClick={launchGame(item.game_code)}>
+                            <img src={item.image_url} className='gameImg img-fluid rounded-4 rounded-lg-5' />
+                        </div>
+                    })}
+                </div>
+                </>
+            )}
             {selectedTab==='slot' && (
                 <>
                 <h4 className='text-white mb-2 mb-sm-4'>{lan === "en" ? "SLOTS" : "စလော့"}</h4>
                 <div className="row mb-4">
-                    {slots && slots.map((slot,index)=>{
-                        return <div key={index} className="cursor-pointer col-4 col-sm-3 col-lg-2 px-1 px-sm-2 mb-2 mb-sm-3" onClick={launchGame(slot.code, slotType)}>
+                    { slotLoading ? <Spinner/> :
+                    slots && slots.map((slot,index)=>{
+                        return <div key={index} className="cursor-pointer col-4 col-sm-3 col-lg-2 px-1 px-sm-2 mb-2 mb-sm-3"  onClick={()=>navigate(`/games?providerId=${slot.id}&gameTypeId=2`)}>
                             <img src={slot.imgUrl} className='gameImg img-fluid rounded-4 rounded-lg-5' />
                         </div>
                     })}
@@ -168,44 +136,16 @@ const GameTabs = () => {
                 <>
                 <h4 className='text-white mb-2 mb-sm-4'>{lan === "en" ? "LIVE CASINO" : "ကာစီနို"}</h4>
                 <div className="row mb-4">
-                    {casinos && casinos.map((casino,index)=>{
-                        return <div key={index} className="cursor-pointer col-4 col-sm-3 col-lg-2 px-1 px-sm-2 mb-2 mb-sm-3" onClick={launchGame(casino.code, casinoType)}>
+                    { casinoLoading ? <Spinner/> :
+                    casinos && casinos.map((casino,index)=>{
+                        return <div key={index} className="cursor-pointer col-4 col-sm-3 col-lg-2 px-1 px-sm-2 mb-2 mb-sm-3"  onClick={()=>navigate(`/games?providerId=${casino.id}&gameTypeId=6`)}>
                             <img src={casino.imgUrl} className='gameImg img-fluid rounded-4 rounded-lg-5' />
                         </div>
                     })}
                 </div>
                 </>
             )}
-            {selectedTab==='sport' && (
-                <>
-                <h4 className='text-white mb-2 mb-sm-4'>{lan === "en" ? "SPORT BOOK" : "အားကစား"}</h4>
-                <div className="row mb-4">
-                    {sports && sports.map((sport,index)=>{
-                        return <div key={index} 
-                        className="cursor-pointer col-4 col-sm-3 col-lg-2 px-1 px-sm-2 mb-2 mb-sm-3"
-                        onClick={launchGame(sport.code, sportType)}
-                        >
-                            <img src={sport.imgUrl} className='gameImg img-fluid rounded-4 rounded-lg-5' />
-                        </div>
-                    })}
-                </div>
-                </>
-            )}
-            {selectedTab==='fishing' && (
-                <>
-                <h4 className='text-white mb-2 mb-sm-4'>{lan === "en" ? "FISHING" : "ငါးဖမ်း"}</h4>
-                <div className="row mb-4">
-                    {fishes && fishes.map((fish,index)=>{
-                        return <div key={index} 
-                        className="cursor-pointer col-4 col-sm-3 col-lg-2 px-1 px-sm-2 mb-2 mb-sm-3"
-                        onClick={launchGame(fish.code, fishType)}
-                        >
-                            <img src={fish.imgUrl} className='gameImg img-fluid rounded-4 rounded-lg-5' />
-                        </div>
-                    })}
-                </div>
-                </>
-            )}
+           
         </div>
     </div>
   )

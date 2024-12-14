@@ -9,8 +9,7 @@ import useFetch from '../hooks/useFetch'
 import BASE_URL from '../hooks/baseURL'
 
 const Layout = () => {
-  const {data: bannerText} = useFetch(BASE_URL + '/bannerText');
- 
+   const {data: bannerText} = useFetch(BASE_URL + '/banner_Text');
 
   return (
     <div >

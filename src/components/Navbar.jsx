@@ -6,15 +6,14 @@ import { AiOutlineLogout } from 'react-icons/ai'
 import { FaRegUserCircle, FaWallet } from 'react-icons/fa'
 import { Link, useNavigate } from 'react-router-dom'
 import { AuthContext } from '../contexts/AuthContext'
+import useLogout from '../hooks/useLogout'
 
 const Navbar = () => {
   const { lan, updateLanguage, auth, user } = useContext(AuthContext);
   const navigate = useNavigate();
-  
-  const logout = (e) => {
-    e.preventDefault();
-    localStorage.removeItem("token");
-    navigate("/login");
+  const {loading,logout} = useLogout();  
+  const handleLogout=async()=>{
+    await logout();
   }
 
   return (
@@ -32,7 +31,7 @@ const Navbar = () => {
         </div>
         {!auth ? 
         <Link className='btn btn-outline-light' to={'/login'}>{lan === "en" ? "Login" : "အကောင့်ဝင်ရန်"}</Link> : 
-        <AiOutlineLogout className="cursor-pointer" onClick={logout} size={24} />
+        <AiOutlineLogout className="cursor-pointer" onClick={handleLogout} size={24} />
         }
       </div>
     </div>

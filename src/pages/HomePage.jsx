@@ -4,6 +4,7 @@ import GameTabs from '../components/GameTabs'
 import { AuthContext } from '../contexts/AuthContext'
 import useFetch from '../hooks/useFetch'
 import BASE_URL from '../hooks/baseURL'
+import AdsBanner from '../components/AdsBanner'
 
 const HomePage = () => {
   const { lan } = useContext(AuthContext);
@@ -11,6 +12,7 @@ const HomePage = () => {
   
   return (
     <div>
+      <AdsBanner/>
       <Banners banners={banners}/>
       <div className="p-3 p-sm-4">
       <GameTabs/>

@@ -35,9 +35,80 @@ button{
   height: 80px;
   border-radius: 100%;
 }
+.contactImg{
+  width: 60px;
+  height: 60px;
+}
+.socialIcon{
+  width: 60px;
+  height: 60px;
+}
+.providerBtn {
+  border-radius: 2px;
+  color: #fafafa;
+  border: 0 solid rgba(240, 241, 255, .35);
+  background: linear-gradient(180deg, #c3c3c3 17%, #6f6f6f 96%);
+  box-shadow: -1px 1px 9px -3px #000000b0;
+}
+.activeGameList {
+  background: linear-gradient(180deg, #d60303 17%, #700101 96%);
+}
+.gameImg{
+  border: 2px solid white;
+}
+.gameProvider{
+  font-size: 14px;
+}
+.customBtn{
+  width: 100%;
+  text-wrap: nowrap;
+}
+.bankImg{
+  width: 100px;
+  height: 100px;
+}
+ .customForm{
+  width: 35%;
+ }
+ @media screen and (max-width:1000px) {
+  .customForm{
+    width: 80%;
+   }
+ }
+ @media screen and (max-width:700px) {
+  th,td{
+    font-size: 14px;
+  }
+ }
+@media screen and (max-width:500px){
+  .gameProvider{
+    font-size: 12px;
+  }
+  .customForm{
+    width: 100%;
+   }
+}
 @media screen and (max-width:400px) {
+  .bankImg{
+    width: 60px;
+    height: 60px;
+  }
+  .customBtn{
+    width: 100%;
+  }
+  .gameProvider{
+    font-size: 11px;
+  }
   th,td,.tabText{
     font-size: 14px;
     text-wrap: nowrap;
+  }
+  .contactImg{
+    width: 40px;
+    height: 40px;
+  }
+  .socialIcon{
+    width: 40px;
+    height: 40px;
   }
 }
