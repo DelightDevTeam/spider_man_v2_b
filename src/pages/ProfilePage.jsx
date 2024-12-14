@@ -7,13 +7,18 @@ import BASE_URL from "../hooks/baseURL";
 import { toast } from "react-toastify";
 import useAuth from "../hooks/useAuth";
 import { MdOutlineLockPerson } from "react-icons/md";
+import useLanguage from "../hooks/useLanguage";
+import en_data from "../lang/en";
+import mm_data from "../lang/mm";
  
 const ProfilePage = () => {
+  const { lang }  = useLanguage();
+  const content = lang === 'en' ? en_data : mm_data;
   const {user,auth} = useAuth();
   
   if(auth) return (
     <div className=" px-2 px-4 px-lg-5 pb-5 mb-5">
-      <h3 className="fw-semibold mb-4 text-center">Profile</h3>
+      <h3 className="fw-semibold mb-4 text-center">{content.profile}</h3>
       <div className="customForm">
         <div className="text-center">
           <img className="user my-2 rounded-5" src={profileImg} />
@@ -45,7 +50,7 @@ const ProfilePage = () => {
         <div className="text-center">
          <Link to={'/change-password'}>
          <button className="mt-4 w-full text-white border border-white rounded-3 text-center py-2 px-4"> 
-            <MdOutlineLockPerson size={26} /> Change Password
+            <MdOutlineLockPerson size={26} /> {content.change_password.title}
           </button>
          </Link>
         </div>

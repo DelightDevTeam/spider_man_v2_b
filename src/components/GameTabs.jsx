@@ -37,16 +37,20 @@ import BASE_URL from '../hooks/baseURL'
 import { useNavigate } from 'react-router-dom'
 import { Spinner } from 'react-bootstrap'
 import launchGame from '../hooks/launchGame'
+import useLanguage from '../hooks/useLanguage'
+import en_data from '../lang/en'
+import mm_data from '../lang/mm'
 const GameTabs = () => {
-    const { lan, auth } = useContext(AuthContext);
+    const { lang }  = useLanguage();
+    const content = lang === 'en' ? en_data.home : mm_data.home;
     const navigate = useNavigate();
     const [selectedTab,setSelectedTab]=useState('all');
 
     const tabs=[
-        {img:all,name:'All Games',name_mm: "ဂိမ်းအားလုံး",value:'all'},
-        {img:all,name:'Hot Games',name_mm: "Hot Game",value:'hot'},
-         {img:slot,name:'Slots',name_mm: "စလော့",value:'slot'},
-        {img:casino,name:'Live Casino',name_mm: "ကာစီနို",value:'casino'},
+        {img:all,name:content.all_games,value:'all'},
+        {img:all,name:content.hot_games,value:'hot'},
+         {img:slot,name:content.slots,value:'slot'},
+        {img:casino,name:content.casinos,value:'casino'},
         // {img:sport,name:'Sports',name_mm: "အားကစား",value:'sport'},
         // {img:fish,name:'Fishing',name_mm: "ငါးဖမ်းဂိမ်း",value:'fishing'},
     ]
@@ -66,7 +70,7 @@ const GameTabs = () => {
                 {tabs.map((tab,index)=>{
                     return <div onClick={()=>setSelectedTab(tab.value)} key={index} className='gameTab rounded-3 p-1 text-center'>
                         <img src={tab.img} className='gameTabImg' />
-                        <p className='gameTabText'>{lan === "en" ? tab.name : tab.name_mm}</p>
+                        <p className='gameTabText'>{tab.name}</p>
                     </div>
                 })}
             </div>
@@ -75,7 +79,7 @@ const GameTabs = () => {
             {/* {selectedTab!=='all'  &&  <h4 className='text-white mb-2 mb-sm-4'>{selectedTab.toUpperCase()} GAMES</h4>} */}
             {selectedTab==='all' && <>
                 <>
-                <h4 className='text-white mb-2 mb-sm-4'>Hot Games</h4>
+                <h4 className='text-white mb-2 mb-sm-4'>{content.hot_games}</h4>
                 <div className="row mb-4">
                     { hotLoading ? <Spinner/> :
                     hotGames && hotGames.map((item,index)=>{
@@ -85,7 +89,7 @@ const GameTabs = () => {
                     })}
                 </div>
                 </>
-                <h4 className='text-white mb-2 mb-sm-4'>{lan === "en" ? "SLOTS" : "စလော့"}</h4>
+                <h4 className='text-white mb-2 mb-sm-4'>{content.slots}</h4>
                 <div className="row mb-4">
                     {slotLoading ? <Spinner/> :
                     slots && slots.map((slot,index)=>{
@@ -94,7 +98,7 @@ const GameTabs = () => {
                         </div>
                     })}
                 </div>
-                <h4 className='text-white mb-2 mb-sm-4'>{lan === "en" ? "LIVE CASINO" : "ကာစီနို"}</h4>
+                <h4 className='text-white mb-2 mb-sm-4'>{content.casinos}</h4>
                 <div className="row mb-4">
                     {
                     casinoLoading ? <Spinner/> :
@@ -108,7 +112,7 @@ const GameTabs = () => {
             </> }
             {selectedTab==='hot' && (
                 <>
-                <h4 className='text-white mb-2 mb-sm-4'>Hot Games</h4>
+                <h4 className='text-white mb-2 mb-sm-4'>{content.hot_games}</h4>
                 <div className="row mb-4">
                     { hotLoading ? <Spinner/> :
                     hotGames && hotGames.map((item,index)=>{
@@ -121,7 +125,7 @@ const GameTabs = () => {
             )}
             {selectedTab==='slot' && (
                 <>
-                <h4 className='text-white mb-2 mb-sm-4'>{lan === "en" ? "SLOTS" : "စလော့"}</h4>
+                <h4 className='text-white mb-2 mb-sm-4'>{content.slot_games}</h4>
                 <div className="row mb-4">
                     { slotLoading ? <Spinner/> :
                     slots && slots.map((slot,index)=>{
@@ -134,7 +138,7 @@ const GameTabs = () => {
             )}
             {selectedTab==='casino' && (
                 <>
-                <h4 className='text-white mb-2 mb-sm-4'>{lan === "en" ? "LIVE CASINO" : "ကာစီနို"}</h4>
+                <h4 className='text-white mb-2 mb-sm-4'>{content.casino_games}</h4>
                 <div className="row mb-4">
                     { casinoLoading ? <Spinner/> :
                     casinos && casinos.map((casino,index)=>{

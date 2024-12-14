@@ -7,9 +7,14 @@ import { FaRegUserCircle, FaWallet } from 'react-icons/fa'
 import { Link, useNavigate } from 'react-router-dom'
 import { AuthContext } from '../contexts/AuthContext'
 import useLogout from '../hooks/useLogout'
+import useLanguage from '../hooks/useLanguage'
+import en_data from '../lang/en'
+import mm_data from '../lang/mm'
 
 const Navbar = () => {
-  const { lan, updateLanguage, auth, user } = useContext(AuthContext);
+  const {  auth, user } = useContext(AuthContext);
+  const { lang,toggleLang }  = useLanguage();
+  const content = lang === 'en' ? en_data.home : mm_data.home;
   const navigate = useNavigate();
   const {loading,logout} = useLogout();  
   const handleLogout=async()=>{
@@ -27,10 +32,10 @@ const Navbar = () => {
       </button> */}
       <div className="cursor-pointer d-flex align-items-center gap-sm-3">
         <div className='me-3'>
-          <small>မြန်မာ</small> {lan === "en" ? <BiToggleRight size={34} onClick={() => updateLanguage("mm")} /> : <BiToggleLeft size={34} onClick={() => updateLanguage("en")} />} <small>EN</small>
+          <small>မြန်မာ</small> {lang === "en" ? <BiToggleRight size={34} onClick={toggleLang} /> : <BiToggleLeft size={34} onClick={toggleLang} />} <small>EN</small>
         </div>
         {!auth ? 
-        <Link className='btn btn-outline-light' to={'/login'}>{lan === "en" ? "Login" : "အကောင့်ဝင်ရန်"}</Link> : 
+        <Link className='btn btn-outline-light' to={'/login'}>{content.login}</Link> : 
         <AiOutlineLogout className="cursor-pointer" onClick={handleLogout} size={24} />
         }
       </div>
@@ -43,7 +48,7 @@ const Navbar = () => {
           </Link>
           <div className='d-flex align-items-center gap-2'>
             <FaWallet size={22} />
-            <small>{Number(user?.balance).toLocaleString('en-US')} MMK</small>
+            <small>{Number(user?.balance).toLocaleString('en-US')} {content.kyat}</small>
           </div>
       </div>
     )}

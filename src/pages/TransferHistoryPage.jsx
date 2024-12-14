@@ -4,13 +4,17 @@ import { AuthContext } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import BASE_URL from '../hooks/baseURL';
 import useFetch from '../hooks/useFetch';
+import useLanguage from '../hooks/useLanguage';
+import en_data from '../lang/en';
+import mm_data from '../lang/mm';
  
 const TransferHistoryPage = () => {
- 
+  const { lang }  = useLanguage();
+  const content = lang === 'en' ? en_data.transfer_logs : mm_data.transfer_logs;
   const [selectedTab, setSelectedTab] = useState(1);
   const tabs = [
-    { name: "Deposit", name_mm: "ဒီနေ့", value: 1 },
-    { name: "Withdraw", name_mm: "မနေ့", value: 2 },
+    { name: content.deposit, value: 1 },
+    { name: content.with_draw, value: 2 },
   ];
 
   const {data: depositLogs, loading:depositLoading} = useFetch(BASE_URL + "/depositlog?page=1" );
@@ -50,7 +54,7 @@ const TransferHistoryPage = () => {
 
   return (
     <div className='py-4 pb-5 ps-2 px-sm-3 px-lg-4'>
-      <h3 className="text-center fw-semibold mb-4">Transfer History</h3>
+      <h3 className="text-center fw-semibold mb-4">{content.title}</h3>
     <div className="d-flex flex-wrap align-items-ceter gap-2 gap-sm-3 mb-4">
       {tabs.map((tab, index) => {
           return (
@@ -70,17 +74,17 @@ const TransferHistoryPage = () => {
     <Table striped bordered hover className='text-center'>
           <thead>
             <tr>
-              <th>Bank</th>
-              <th>Amount</th>
-              <th>Account Name</th>
-              <th>Status</th>
-              <th>Date</th>
+              <th>{content.bank}</th>
+              <th>{content.amount}</th>
+              <th>{content.account_name}</th>
+              <th>{content.status}</th>
+              <th>{content.date}</th>
             </tr>
           </thead>
           <tbody>
             {depositLoading||withDrawLoading ? (
               <tr>
-               <td colSpan="4" className='text-center'>Loading....</td>
+               <td colSpan="4" className='text-center'>{content.loading}</td>
               </tr>
             ) : logs ? logs.map((log, index) => (
             <tr key={index}>
@@ -97,7 +101,7 @@ const TransferHistoryPage = () => {
             </tr>
             )): (
               <tr>
-                <td colSpan="4" className="text-center text-success">No Data...</td>
+                <td colSpan="4" className="text-center text-success">{content.no_data}</td>
               </tr>
             )}
 

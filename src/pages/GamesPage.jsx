@@ -7,8 +7,13 @@ import 'swiper/css';
 import { Spinner } from 'react-bootstrap';
 import launchGame from "../hooks/launchGame";
 import useGames from '../hooks/useGames';
+import useLanguage from '../hooks/useLanguage';
+import en_data from '../lang/en';
+import mm_data from '../lang/mm';
 
 const GamesPage = () => {
+    const { lang }  = useLanguage();
+    const content = lang === 'en' ? en_data.home : mm_data.home;
     const navigate=useNavigate();
     const [searchParams]=useSearchParams();
     const providerId=parseInt(searchParams.get('providerId'),10) ||1;
@@ -58,7 +63,7 @@ const GamesPage = () => {
     console.log('gamesData',gameData);
   return (
     <div className='py-4 px-2 px-sm-4'>
-        <h4>{gameTypeId===2 ? 'Slot' : 'Casino'} Games</h4>
+        <h4>{gameTypeId===2 ? content.slot_games : content.casino_games} </h4>
         <Swiper
                     className="mySwiper mt-3 w-full"
                     breakpoints={{
