@@ -4,15 +4,19 @@ import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 import BASE_URL from "../hooks/baseURL";
+import useLanguage from "../hooks/useLanguage";
+import en_data from "../lang/en";
+import mm_data from "../lang/mm";
 
 const GameLogsPage = () => {
- 
+  const { lang }  = useLanguage();
+  const content = lang === 'en' ? en_data.game_logs : mm_data.game_logs;
   const [selectedTab, setSelectedTab] = useState("today");
   const tabs = [
-    { name: "Today", name_mm: "ဒီနေ့", value: "today" },
-    { name: "Yesterday", name_mm: "မနေ့", value: "yesterday" },
-    { name: "This Week", name_mm: "ဒီအပတ်", value: "this_week" },
-    { name: "Last Week", name_mm: "အရင်အပတ်", value: "last_week" },
+    { name: content.today, value: "today" },
+    { name: content.yesterday, value: "yesterday" },
+    { name:content.this_week, value: "this_week" },
+    { name: content.last_week, value: "last_week" },
   ];
 
   const {data: logs, loading} = useFetch(BASE_URL + "/wager-logs?type=" + selectedTab);
@@ -31,7 +35,7 @@ const GameLogsPage = () => {
 
   return (
     <div className="py-4 pb-5 ps-2 px-sm-3 px-lg-4">
-      <h3 className="text-center mb-4">Game Logs</h3>
+      <h3 className="text-center mb-4">{content.title}</h3>
       <div className="d-flex flex-wrap align-items-ceter gap-2 gap-sm-3 mb-4">
         {tabs.map((tab, index) => {
           return (
@@ -51,18 +55,18 @@ const GameLogsPage = () => {
         <Table striped bordered hover>
           <thead>
             <tr>
-              <th>From</th>
-              <th>To</th>
-              <th>Game Name</th>
-              <th>Count</th>
-              <th>Bet Amount</th>
-              <th>Win/Lose</th>
+              <th>{content.from}</th>
+              <th>{content.to}</th>
+              <th>{content.game_name}</th>
+              <th>{content.count}</th>
+              <th>{content.bet_amount}</th>
+              <th>{content.win_lose}</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan="6" className="text-center text-success">Loading ....</td>
+                <td colSpan="6" className="text-center text-success">{content.loading}</td>
               </tr>
             ) : logs.length>0 ? logs.map((log, index) => (
             <tr key={index}>
@@ -75,7 +79,7 @@ const GameLogsPage = () => {
             </tr>
             )): (
               <tr>
-                <td colSpan="6" className="text-center text-success fw-semibold">No Data...</td>
+                <td colSpan="6" className="text-center text-success fw-semibold">{content.no_data}</td>
               </tr>
             )}
 

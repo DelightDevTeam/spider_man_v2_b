@@ -1,54 +1,24 @@
-import { createContext, useEffect, useState, useMemo } from "react";
-import en_data from "../lang/en";
-import mm_data from "../lang/mm";
+import { createContext, useCallback, useMemo, useState } from "react";
 
-const LanguageContext = createContext({
-    updateLanguage: () => { },
-    content: null,
-});
 
-const LanguageContextProvider = ({ children }) => {
-    const [language, setLanguage] = useState("en");
-    const [content, setContent] = useState(en_data);
+export const LanguageContext = createContext(null);
 
-    useEffect(() => {
-        const lan = localStorage.getItem("lan");
-        if (lan) {
-            setLanguage(lan);
-        } else {
-            setLanguage("en");
-        }
-    }, []);
+const LanguageProvider=({children})=>{
 
-    const updateLanguage = (newLanguage) => {
-        if (newLanguage !== language) {
-            localStorage.setItem("lan", newLanguage);
-            setLanguage(newLanguage);
-        }
-    };
+    const [lang,setLang]=useState(localStorage.getItem('lang') || 'en');
 
-    useEffect(() => {
-        if (language === "mm") {
-            setContent(mm_data);
-        }else {
-            setContent(en_data);
-        }
-    }, [language]);
+    const toggleLang=useCallback(()=>{
+        setLang((prev)=>prev==='en' ? 'mm' : 'en');
+        localStorage.setItem('lang',lang==='en'?'mm':'en')
+    },[lang] );
 
-    const value = useMemo(
-        () => ({
-            lan: language,
-            content: content,
-            updateLanguage,
-        }),
-        [language, content]
-    );
+    const values=useMemo(()=>({ lang,toggleLang }),[lang])
 
     return (
-        <LanguageContext.Provider value={value}>
+        <LanguageContext.Provider value={values}>
             {children}
         </LanguageContext.Provider>
-    );
-};
+    )
+}
 
-export { LanguageContext, LanguageContextProvider };
+export default LanguageProvider;

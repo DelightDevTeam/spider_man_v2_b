@@ -8,17 +8,21 @@ import { Link } from 'react-router-dom'
 import { AuthContext } from '../contexts/AuthContext'
 import { FaHeadphonesSimple } from 'react-icons/fa6'
 import { BiWallet } from 'react-icons/bi'
+import en_data from '../lang/en'
+import mm_data from '../lang/mm'
+import useLanguage from '../hooks/useLanguage'
 
 const Footer = () => {
-    const {lan} = useContext(AuthContext);
+    const { lang }  = useLanguage();
+    const content = lang === 'en' ? en_data.footer : mm_data.footer;
     const menus=[
-        {icon:<IoDiamondOutline size={21} />,name:'Home',name_mm:'ပင်မ',link:'/'},
+        {icon:<IoDiamondOutline size={21} />,name:content.home,link:'/'},
         // {icon:<MdOutlineLockPerson  size={26}/>,name:'Change Password',name_mm:'စကားဝှက်ပြောင်းရန်',link:'/change-password'},
-        {icon:<FaGift  size={21}/>,name:'Promotion',name_mm:'ပရိုမိုရှင်း',link:'/promotion'},
-        {icon:<BiWallet  size={26}/>,name:'Game Logs',name_mm:'Wallet',link:'/wallet'},
-        {icon:<HiOutlineClipboardDocumentList  size={26}/>,name:'Game Logs',name_mm:'ဂိမ်းမှတ်တမ်း',link:'/game-logs'},
-        {icon:<HiOutlineCash  size={26} />,name:'Transfer History',name_mm:'ငွေမှတ်တမ်း', link:'/transfer-history'},
-        {icon:<FaHeadphonesSimple  size={20} />,name:'Contact',name_mm:'Contact', link:'/contact'},
+        {icon:<FaGift  size={21}/>,name:content.promotion,link:'/promotion'},
+        {icon:<BiWallet  size={26}/>,name:content.wallet,link:'/wallet'},
+        {icon:<HiOutlineClipboardDocumentList  size={26}/>,name: content.game_logs,link:'/game-logs'},
+        {icon:<HiOutlineCash  size={26} />,name:content.transfer_logs, link:'/transfer-history'},
+        {icon:<FaHeadphonesSimple  size={20} />,name:content.contact, link:'/contact'},
 
     ]
   return (
@@ -26,7 +30,7 @@ const Footer = () => {
         {menus.map((menu,index)=>{
             return <Link to={menu.link} key={index} className='text-center' >
                 {menu.icon}
-                <p className="footerText d-block mt-lg-1">{lan === "en" ? menu.name : menu.name_mm}</p>
+                <p className="footerText d-block mt-lg-1">{menu.name}</p>
             </Link>
         })}
     </div>

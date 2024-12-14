@@ -3,8 +3,13 @@ import useFetch from '../hooks/useFetch'
 import BASE_URL from '../hooks/baseURL'
 import useFormSubmit from '../hooks/useFormSubmit'
  import { Button, Spinner } from 'react-bootstrap';
+import useLanguage from '../hooks/useLanguage';
+import en_data from '../lang/en';
+import mm_data from '../lang/mm';
 
 const WithDrawPage = () => {
+  const { lang }  = useLanguage();
+  const content = lang === 'en' ? en_data.with_draw : mm_data.with_draw;
     const [selectedBank,setSelectedBank]=useState(null);
     const [step,setStep]=useState(1);
     const {data: banks} = useFetch(BASE_URL + "/agentPaymentType"); 
@@ -15,7 +20,7 @@ const WithDrawPage = () => {
 
     return (
     <div className='px-2 px-sm-4 py-5 mb-5'>
-      <h4 className="text-center mb-4">Withdraw</h4>
+      <h4 className="text-center mb-4">{content.title}</h4>
     {step===1 &&  <ChooseBank goToNextStep={goToNextStep} banks={banks} />}
     {step===2 &&  <WithDrawForm bank={selectedBank} /> }
     </div>
@@ -26,8 +31,10 @@ export default WithDrawPage
 
 
 const ChooseBank=({banks,goToNextStep})=>{
+  const { lang }  = useLanguage();
+  const content = lang === 'en' ? en_data : mm_data;
     return  <>
-    <h5 className='mb-4'>Choose Payment Method </h5>
+    <h5 className='mb-4'>{content.choose_payment}</h5>
     <div className="d-flex align-items-center gap-3 gap-sm-5">
       {banks.map((bank)=>{
           return <div onClick={()=>goToNextStep(bank)} key={bank.id}>
@@ -39,7 +46,8 @@ const ChooseBank=({banks,goToNextStep})=>{
 }
 
 const WithDrawForm=({bank})=>{
-
+  const { lang }  = useLanguage();
+  const content = lang === 'en' ? en_data : mm_data;
     const [form,setForm]=useState({
         amount:'',account_name:'',account_number:''
     })
@@ -52,7 +60,7 @@ const WithDrawForm=({bank})=>{
         e.preventDefault();
         const url=BASE_URL + "/withdraw"
        await inputSubmit (url,{...form,payment_type_id:bank.id},'POST',
-        '/wallet','With Draw successfully!'
+        '/wallet',content.with_draw.success
        )
     }
 
@@ -62,7 +70,7 @@ const WithDrawForm=({bank})=>{
      </div>
     <form onSubmit={handleSubmit}>
               <div className="mb-3">
-                <p className='mb-1'>Amount</p>
+                <p className='mb-1'>{content.with_draw.amount}</p>
                 <input type='text' 
                  
                 className="rounded-3 form-control" 
@@ -75,7 +83,7 @@ const WithDrawForm=({bank})=>{
                 {/* {errMsg && <small className='text-danger'>{errMsg}</small>} */}
               </div>
               <div className="mb-3">
-                <p className='mb-1'> Account Name</p>
+                <p className='mb-1'>{content.with_draw.account_name}</p>
                 <input type='text' 
                  className="rounded-3 form-control"
                id='account_name'
@@ -85,7 +93,7 @@ const WithDrawForm=({bank})=>{
                 {error?.account_name && <small className='text-danger'>{error.account_name}</small>}
               </div>
               <div className="mb-3">
-                <p className='mb-1'> Account Number</p>
+                <p className='mb-1'>{content.with_draw.account_number}</p>
                 <input type='text' 
                  className="rounded-3 form-control"
                id='account_number'
@@ -97,7 +105,7 @@ const WithDrawForm=({bank})=>{
               
               <button type='submit' className="mt-4 w-full text-white border border-white rounded-3 text-center py-2 px-4">
                 {loading && <Spinner size='sm' className='me-2' />}
-                Submit
+                {content.with_draw.title}
               </button>
             </form>
     </div>
