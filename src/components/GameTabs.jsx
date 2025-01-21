@@ -40,119 +40,140 @@ import launchGame from '../hooks/launchGame'
 import useLanguage from '../hooks/useLanguage'
 import en_data from '../lang/en'
 import mm_data from '../lang/mm'
+import Providers from './Providers'
+import Games from './Games'
 const GameTabs = () => {
-    const { lang }  = useLanguage();
+    const { lang } = useLanguage();
     const content = lang === 'en' ? en_data.home : mm_data.home;
     const navigate = useNavigate();
-    const [selectedTab,setSelectedTab]=useState('all');
+    const [selectedTab, setSelectedTab] = useState('all');
 
-    const tabs=[
-        {img:all,name:content.all_games,value:'all'},
-        {img:all,name:content.hot_games,value:'hot'},
-         {img:slot,name:content.slots,value:'slot'},
-        {img:casino,name:content.casinos,value:'casino'},
+    const tabs = [
+        { img: all, name: content.all_games, value: 'all' },
+        { img: all, name: content.hot_games, value: 'hot' },
+        { img: fish, name: content.fishing, value: 'fishing' },
+        { img: slot, name: content.slots, value: 'slot' },
+        { img: sport, name: content.arcade, value: 'arcade' },
+        { img: slot, name: content.table, value: 'table' },
+        { img: casino, name: content.casinos, value: 'casino' },
+        { img: sport, name: content.lottery, value: 'lottery' },
+        { img: sport, name: content.bingo, value: 'bingo' },
         // {img:sport,name:'Sports',name_mm: "အားကစား",value:'sport'},
         // {img:fish,name:'Fishing',name_mm: "ငါးဖမ်းဂိမ်း",value:'fishing'},
     ]
-    const { data: hotGames,loading:hotLoading } = useFetch(BASE_URL + "/hotgamelist");
-    console.log('hotGames',hotGames)
+    const { data: hotGames, loading: hotLoading } = useFetch(BASE_URL + "/hotgamelist");
+    const { data: fishGames, loading: fishLoading } = useFetch(BASE_URL + "/slotfishgamelist/4/2");
+    // console.log('hotGames', hotGames)
 
-    const { data: slotGames ,loading:slotLoading} = useFetch(BASE_URL + "/gameTypeProducts/2");
+    const { data: slotGames, loading: slotLoading } = useFetch(BASE_URL + "/gameTypeProducts/2");
+    const { data: arcadeGames, loading: arcadeLoading } = useFetch(BASE_URL + "/gameTypeProducts/4");
+    const { data: tableGames, loading: tableLoading } = useFetch(BASE_URL + "/gameTypeProducts/5");
+    const { data: casinoGames, loading: casinoLoading } = useFetch(BASE_URL + "/gameTypeProducts/6");
+    const { data: lotteryGames, loading: lotteryLoading } = useFetch(BASE_URL + "/gameTypeProducts/8");
+    const { data: bingoGames, loading: bingoLoading } = useFetch(BASE_URL + "/gameTypeProducts/9");
+
     const slots = slotGames?.products;
- 
-    const { data: casinoGames,loading:casinoLoading } = useFetch(BASE_URL + "/gameTypeProducts/6");
+    const arcades = arcadeGames?.products;
+    const tables = tableGames?.products;
     const casinos = casinoGames?.products;
-  
-  return (
-    <div className='row cursor-pointer mb-5'>
-        <div className="div1  px-0">
-            <div className="d-flex flex-column gap-3">
-                {tabs.map((tab,index)=>{
-                    return <div onClick={()=>setSelectedTab(tab.value)} key={index} className='gameTab rounded-3 p-1 text-center'>
-                        <img src={tab.img} className='gameTabImg' />
-                        <p className='gameTabText'>{tab.name}</p>
-                    </div>
-                })}
+    const lotteries = lotteryGames?.products;
+    const bingos = bingoGames?.products;
+
+    return (
+        <div className='row cursor-pointer mb-5'>
+            <div className="div1  px-0">
+                <div className="d-flex flex-column gap-3">
+                    {tabs.map((tab, index) => {
+                        return <div onClick={() => setSelectedTab(tab.value)} key={index} className='gameTab rounded-3 p-1 text-center'>
+                            <img src={tab.img} className='gameTabImg' />
+                            <p className='gameTabText'>{tab.name}</p>
+                        </div>
+                    })}
+                </div>
+            </div>
+            <div className="div2 ps-3 ps-sm-4">
+                {/* {selectedTab!=='all'  &&  <h4 className='text-white mb-2 mb-sm-4'>{selectedTab.toUpperCase()} GAMES</h4>} */}
+                {selectedTab === 'all' &&
+                    <>
+                        <h4 className='text-white mb-2 mb-sm-4'>{content.slots}</h4>
+                        <div className="row mb-4">
+                            {slotLoading ? <Spinner /> : <Providers providers={slots} type={2} />}
+                        </div>
+                        <h4 className='text-white mb-2 mb-sm-4'>{content.arcade}</h4>
+                        <div className="row mb-4">
+                            {arcadeLoading ? <Spinner /> : <Providers providers={arcades} type={4} />}
+                        </div>
+                        <h4 className='text-white mb-2 mb-sm-4'>{content.table}</h4>
+                        <div className="row mb-4">
+                            {tableLoading ? <Spinner /> : <Providers providers={tables} type={5} />}
+                        </div>
+                        <h4 className='text-white mb-2 mb-sm-4'>{content.casinos}</h4>
+                        <div className="row mb-4">
+                            {casinoLoading ? <Spinner /> : <Providers providers={casinos} type={6} />}
+                        </div>
+                        <h4 className='text-white mb-2 mb-sm-4'>{content.lottery}</h4>
+                        <div className="row mb-4">
+                            {lotteryLoading ? <Spinner /> : <Providers providers={lotteries} type={8} />}
+                        </div>
+                        <h4 className='text-white mb-2 mb-sm-4'>{content.bingo}</h4>
+                        <div className="row mb-4">
+                            {bingoLoading ? <Spinner /> : <Providers providers={bingos} type={9} />}
+                        </div>
+                    </>
+                }
+                {selectedTab === 'hot' && <Games games={hotGames} loading={hotLoading} title={content?.hot_games} />}
+                {selectedTab === 'fishing' && <Games games={fishGames} loading={fishLoading} title={content?.fishing} />}
+                {selectedTab === 'slot' && (
+                    <>
+                        <h4 className='text-white mb-2 mb-sm-4'>{content.slots}</h4>
+                        <div className="row mb-4">
+                            {slotLoading ? <Spinner /> : <Providers providers={slots} type={2} />}
+                        </div>
+                    </>
+                )}
+                {selectedTab === 'arcade' && (
+                    <>
+                        <h4 className='text-white mb-2 mb-sm-4'>{content.arcade}</h4>
+                        <div className="row mb-4">
+                            {arcadeLoading ? <Spinner /> : <Providers providers={arcades} type={4} />}
+                        </div>
+                    </>
+                )}
+                {selectedTab === 'table' && (
+                    <>
+                        <h4 className='text-white mb-2 mb-sm-4'>{content.table}</h4>
+                        <div className="row mb-4">
+                            {tableLoading ? <Spinner /> : <Providers providers={tables} type={5} />}
+                        </div>
+                    </>
+                )}
+                {selectedTab === 'casino' && (
+                    <>
+                        <h4 className='text-white mb-2 mb-sm-4'>{content.casinos}</h4>
+                        <div className="row mb-4">
+                            {casinoLoading ? <Spinner /> : <Providers providers={casinos} type={6} />}
+                        </div>
+                    </>
+                )}
+                {selectedTab === 'lottery' && (
+                    <>
+                        <h4 className='text-white mb-2 mb-sm-4'>{content.lottery}</h4>
+                        <div className="row mb-4">
+                            {lotteryLoading ? <Spinner /> : <Providers providers={lotteries} type={8} />}
+                        </div>
+                    </>
+                )}
+                {selectedTab === 'bingo' && (
+                    <>
+                        <h4 className='text-white mb-2 mb-sm-4'>{content.bingo}</h4>
+                        <div className="row mb-4">
+                            {bingoLoading ? <Spinner /> : <Providers providers={bingos} type={9} />}
+                        </div>
+                    </>
+                )}
             </div>
         </div>
-        <div className="div2 ps-3 ps-sm-4">
-            {/* {selectedTab!=='all'  &&  <h4 className='text-white mb-2 mb-sm-4'>{selectedTab.toUpperCase()} GAMES</h4>} */}
-            {selectedTab==='all' && <>
-                <>
-                <h4 className='text-white mb-2 mb-sm-4'>{content.hot_games}</h4>
-                <div className="row mb-4">
-                    { hotLoading ? <Spinner/> :
-                    hotGames && hotGames.map((item,index)=>{
-                        return <div key={index} className="cursor-pointer col-4 col-sm-3 col-lg-2 px-1 px-sm-2 mb-2 mb-sm-3"  onClick={launchGame(item.game_code)}>
-                            <img src={item.image_url} className='gameImg img-fluid rounded-4 rounded-lg-5' />
-                        </div>
-                    })}
-                </div>
-                </>
-                <h4 className='text-white mb-2 mb-sm-4'>{content.slots}</h4>
-                <div className="row mb-4">
-                    {slotLoading ? <Spinner/> :
-                    slots && slots.map((slot,index)=>{
-                        return <div key={index} className="cursor-pointer col-4 col-sm-3 col-lg-2 px-1 px-sm-2 mb-2 mb-sm-3" onClick={()=>navigate(`/games?providerId=${slot.id}&gameTypeId=2`)}>
-                            <img src={slot.imgUrl} className='gameImg img-fluid rounded-4 rounded-lg-5' />
-                        </div>
-                    })}
-                </div>
-                <h4 className='text-white mb-2 mb-sm-4'>{content.casinos}</h4>
-                <div className="row mb-4">
-                    {
-                    casinoLoading ? <Spinner/> :
-                    casinos && casinos.map((casino,index)=>{
-                        return <div key={index} className="cursor-pointer col-4 col-sm-3 col-lg-2 px-1 px-sm-2 mb-2 mb-sm-3" onClick={()=>navigate(`/games?providerId=${casino.id}&gameTypeId=6`)}>
-                            <img src={casino.imgUrl} className='gameImg img-fluid rounded-4 rounded-lg-5' />
-                        </div>
-                    })}
-                </div>
-                
-            </> }
-            {selectedTab==='hot' && (
-                <>
-                <h4 className='text-white mb-2 mb-sm-4'>{content.hot_games}</h4>
-                <div className="row mb-4">
-                    { hotLoading ? <Spinner/> :
-                    hotGames && hotGames.map((item,index)=>{
-                        return <div key={index} className="cursor-pointer col-4 col-sm-3 col-lg-2 px-1 px-sm-2 mb-2 mb-sm-3"  onClick={launchGame(item.game_code)}>
-                            <img src={item.image_url} className='gameImg img-fluid rounded-4 rounded-lg-5' />
-                        </div>
-                    })}
-                </div>
-                </>
-            )}
-            {selectedTab==='slot' && (
-                <>
-                <h4 className='text-white mb-2 mb-sm-4'>{content.slot_games}</h4>
-                <div className="row mb-4">
-                    { slotLoading ? <Spinner/> :
-                    slots && slots.map((slot,index)=>{
-                        return <div key={index} className="cursor-pointer col-4 col-sm-3 col-lg-2 px-1 px-sm-2 mb-2 mb-sm-3"  onClick={()=>navigate(`/games?providerId=${slot.id}&gameTypeId=2`)}>
-                            <img src={slot.imgUrl} className='gameImg img-fluid rounded-4 rounded-lg-5' />
-                        </div>
-                    })}
-                </div>
-                </>
-            )}
-            {selectedTab==='casino' && (
-                <>
-                <h4 className='text-white mb-2 mb-sm-4'>{content.casino_games}</h4>
-                <div className="row mb-4">
-                    { casinoLoading ? <Spinner/> :
-                    casinos && casinos.map((casino,index)=>{
-                        return <div key={index} className="cursor-pointer col-4 col-sm-3 col-lg-2 px-1 px-sm-2 mb-2 mb-sm-3"  onClick={()=>navigate(`/games?providerId=${casino.id}&gameTypeId=6`)}>
-                            <img src={casino.imgUrl} className='gameImg img-fluid rounded-4 rounded-lg-5' />
-                        </div>
-                    })}
-                </div>
-                </>
-            )}
-           
-        </div>
-    </div>
-  )
+    )
 }
 
 export default GameTabs

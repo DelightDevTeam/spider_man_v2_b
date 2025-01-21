@@ -6,6 +6,11 @@ const en_data = {
         hot_games:'Hot Games',
         slots:'Slots',
         casinos:'Casinos',
+        fishing: 'Fishing',
+        arcade: 'Arcade',
+        table: 'Table',
+        lottery: 'Lottery',
+        bingo: 'Bingo',
         slot_games:'Slot Games',
         casino_games:'Casino Games',
         load_more:'Load More'
@@ -24,11 +29,11 @@ const en_data = {
         success:'Deposit successfully!'
     },
     with_draw:{
-        title:'With Draw',
+        title:'Withdraw',
         amount:'Amount',
         account_name:'Account Name',
         account_number:'Account Number',
-        success:'WithDraw successfully!'
+        success:'Withdraw successfully!'
     },
     game_logs:{
         title:'Game Logs',

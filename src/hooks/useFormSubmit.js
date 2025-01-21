@@ -30,6 +30,7 @@ const useFormSubmit = () => {
         if (res.status === 422) {
           setError(data.errors);
         }else if(res.status === 401){
+          toast.error(data.message);
           setErrMsg(data.message);
         }else {
           setError("An unexpected error occurred.");

@@ -6,6 +6,11 @@ const mm_data = {
         hot_games: 'ဟော့ဂိမ်းများ',
         slots: 'စလော့များ',
         casinos: 'ကာစီနိုများ',
+        fishing: 'ငါးဖမ်းဂိမ်း',
+        arcade: 'အာကိတ်',
+        table: 'တေပယ်',
+        lottery: 'ထီ',
+        bingo: 'ဘင်ဂိမ်း',
         slot_games: 'စလော့ဂိမ်းများ',
         casino_games: 'ကာစီနိုဂိမ်းများ',
         load_more: 'နောက်ထပ်တင်ရန်'
